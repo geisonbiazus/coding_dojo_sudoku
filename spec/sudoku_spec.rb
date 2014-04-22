@@ -108,4 +108,32 @@ describe "Sudoku" do
 		expect(@sudoku.errors.find_all {|e| e == [2, 2]}.length).to eql(1)
 	end
 
+	it "should ignore a field with 0" do
+		@board[0][0] = 0
+		@board[0][1] = 0
+
+		@sudoku.board = @board
+		@sudoku.validate
+		expect(@sudoku.errors.find_all {|e| e == [0, 0]}.length).to eql(0)
+
+		@board[1][1] = 0
+		@sudoku.board = @board
+		@sudoku.validate
+		expect(@sudoku.errors.find_all {|e| e == [0, 0]}.length).to eql(0)
+
+		@board[1][0] = 0
+		@sudoku.board = @board
+		@sudoku.validate
+		expect(@sudoku.errors.find_all {|e| e == [0, 0]}.length).to eql(0)
+	end
+
+	it "should say if the board is completed" do
+		@sudoku.board = @board
+		expect(@sudoku).to be_complete
+
+		@board[0][1] = 0
+		@sudoku.board = @board
+		expect(@sudoku).not_to be_complete
+	end
+
 end

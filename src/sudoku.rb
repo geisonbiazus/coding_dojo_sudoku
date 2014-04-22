@@ -55,11 +55,21 @@ class Sudoku
 	end
 
 	def invalid_sequence?(sequence, number)
+		return nil if number.to_i < 1
 		sequence.find_all {|n| n == number}.length > 1
 	end
 
 	def add_error(x, y)
 		errors << [x, y] unless errors.detect {|e| e == [x, y]}
+	end
+
+	def complete?
+		validate
+		errors.empty? && filled?
+	end
+
+	def filled?
+		board.detect {|line| line.detect {|number| number.to_i < 1 } }.nil?
 	end
 
 end
